@@ -103,4 +103,28 @@ Main Features:
 - Create financial journals for company operation cost
 - Financial Transaction Verification system
 - Journal and Log system
-- Transaction Reports 
+- Transaction Reports
+
+## Installation Guide 
+
+# For Windows
+1. Download & Install XAMPP
+2. Download & Install Composer
+3. Download & Install NodeJs
+4. Import the Database located in (Database/charty.sql) to phpmyadmin
+    Visit phpMyAdmin:
+    http://localhost/phpmyadmin
+    Click New
+    Create a database named: charty
+    Open the database
+    Go to Import tab
+    Choose the file: database/charty.sql
+    Click Go
+5. Configure .env for your database
+    DB_DATABASE=charty
+    DB_USERNAME=root
+    DB_PASSWORD=
+6. on project directory run command : php artisan serve
+
+
+
