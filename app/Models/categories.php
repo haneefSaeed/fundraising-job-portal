@@ -11,18 +11,37 @@ class categories extends Model
 
     use HasFactory;
 
-    public function cause(){
+    public function cause()
+    {
         return $this->hasOne(causes::class);
     }
-    public function blog(){
+    public function blog()
+    {
         return $this->hasOne(Blog::class);
     }
-
-    public function job(){
-        return $this->hasOne(Job::class);
+    public function jobs()
+    {
+        return $this->hasMany(Job::class, 'cat_id', 'id');
     }
 
-    public function transactions(){
+    public function transactions()
+    {
         return $this->hasOne(transactions::class);
+    }
+
+    public function allJobs()
+    {
+        return $this->hasManyThrough(
+            Job::class,        // Final model
+            categories::class, // Intermediate model (subcategories)
+            'cat_root',        // Foreign key on subcategories table
+            'cat_id',          // Foreign key on jobs table
+            'id',              // Local key on root category
+            'id'               // Local key on subcategory
+        );
+    }
+    public function children()
+    {
+        return $this->hasMany(categories::class, 'cat_root', 'id');
     }
 }

@@ -31,7 +31,13 @@ class HomeController extends Controller
     {
         $all_sliders = slider::all();
         $all_services = services::all();
-        $all_cats = categories::select('*')->where([['cat_root', '=', 0], ['cat_cat', '=', 'JOB']])->get();
+        $all_cats = categories::where('cat_root', 0)
+            ->where('cat_cat', 'JOB')
+            ->where('cat_is_featured', 1)
+            ->withCount('allJobs')
+            ->take(5)
+            ->get();
+
         $all_causes = causes::all()->sortByDesc('seenctr')->take(5); ///need click seen counter
         $donors = donations::all();
         return view('index', [
@@ -39,7 +45,7 @@ class HomeController extends Controller
             'services' => $all_services,
             'cats' => $all_cats,
             'causes' => $all_causes,
-            'donations'=>$donors
+            'donations' => $donors
         ]);
     }
 

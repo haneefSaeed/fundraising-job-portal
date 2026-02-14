@@ -8,9 +8,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet">
+
     <script src="{{asset('sweetalert.min.js')}}"></script>
+    <script src="https://kit.fontawesome.com/bc2fe822df.js" crossorigin="anonymous"></script>
 
 
 
@@ -55,7 +61,7 @@
 
 <body>
 
-    <header class="sticky top-0 bg-white shadow z-50">
+    <header class="sticky top-0 bg-white z-50">
         @php
             $user = App\Models\website_details::where('id', 1)->first();
         @endphp
@@ -69,15 +75,20 @@
                 </div>
 
                 <!-- Desktop Menu -->
-                <nav class="hidden md:flex space-x-6 items-center font-medium uppercase text-gray-700">
-                    <a href="{{ route('homepage') }}" class="hover:text-black">Home</a>
-                    <a href="{{ route('causes') }}" class="hover:text-black">Causes</a>
-                    <a href="{{ route('jobs') }}" class="hover:text-black">Jobs</a>
-                    <a href="{{ route('Blog') }}" class="hover:text-black">Blog</a>
+                <nav class="hidden md:flex space-x-6 items-center font-worksans font-[500] uppercase text-gray-700">
+                    <a href="{{ route('homepage') }}"
+                        class="p-2 hover:text-black hover:border-b-2 hover:border-b-black ">Home</a>
+                    <a href="{{ route('causes') }}"
+                        class="p-2 hover:text-black hover:border-b-2 hover:border-b-black">Causes</a>
+                    <a href="{{ route('jobs') }}"
+                        class="p-2 hover:text-black hover:border-b-2 hover:border-b-black">Jobs</a>
+                    <a href="{{ route('Blog') }}"
+                        class="p-2 hover:text-black hover:border-b-2 hover:border-b-black">Blog</a>
 
                     <!-- About Us Dropdown -->
                     <div class="relative group">
-                        <button class="flex items-center hover:text-black focus:outline-none">
+                        <button
+                            class="flex items-center p-2 hover:text-black hover:border-b-2 hover:border-b-black focus:outline-none">
                             About Us
                             <i class="ml-1 ion ion-ios-arrow-down"></i>
                         </button>
@@ -92,7 +103,7 @@
                         </div>
                     </div>
 
-                    <a href="#" class="hover:text-black">Contact Us</a>
+                    <a href="#" class="p-2 hover:text-black hover:border-b-2 hover:border-b-black">Contact Us</a>
                 </nav>
 
                 <!-- Right Buttons -->
@@ -202,58 +213,57 @@
     @yield('content')
 
     <section id="Footer">
-        <div class="row justify-center p-5" style="background-color: #222222; color: white;">
-            <div class="row w-75" style="max-width: 80rem; ">
-                <div class="col-lg-4">
-                    <p class="brand nounderline " style="color:white; margin: 5px;">{{$user->web_name}}</p>
-                    <p style="font-size: 10pt;">{{$user->web_description}}</p>
-                    <div class="row">
-                        <div class="col-2"><i class="fa fa-location-arrow"
-                                style="color:darkorange;font-size: 18pt;"></i></div>
-                        <div class="col-10">
-                            <h5 class="font-semibold" style="color: white">Address</h5>
-                            <p style="font-size: 10pt; color: #aaa">{{$user->web_address}}</p>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-2 p-3"><i class="fa fa-mobile" style="color:darkorange;font-size: 22pt;"></i>
-                        </div>
-                        <div class="col-10">
-                            <h5 class="font-semibold" style="color: white">Contact</h5>
-                            <p style="font-size: 10pt; color: #aaa">{{$user->web_contact}}</p>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-2 p-3"><i class="fa fa-envelope" style="color:darkorange;font-size: 16pt;"></i>
-                        </div>
-                        <div class="col-10">
-                            <h5 class="font-semibold" style="color: white">E-Mail</h5>
-                            <p style="font-size: 10pt; color: #aaa">{{$user->web_email}}</p>
-                        </div>
+        <div class="flex w-full justify-center bg-[#222] ">
+            <div class="flex justify-between p-16 w-full h-[350px] max-h-[350px] text-white">
+                <div class="max-w-[250px]">
+                    <a href="#" class="text-black  text-2xl font-bold "> <img src="{{ asset('images/logo.png') }}"
+                            alt="{{ $user->web_name }}" class="h-8 w-auto invert"></a>
+                    <p class="text-justify pt-3">Raise Bridge help you fundraise, search for job, learn new things...all
+                        in one platform. </p>
+                    <div class="flex flex-col mt-3 gap-2">
+                        <div class="flex gap-2 "> <i class="fa-solid fa-phone inline"></i> +34 5225 2522 </div>
+                        <div class="flex gap-2 "> <i class="fa-solid fa-location-arrow inline"></i> Mansfield Tx </div>
+                        <div class="flex gap-2 "> <i class="fa-solid fa-at inline"></i> hello@raisebridge.com </div>
                     </div>
                 </div>
-                <div class="col-lg-2 offset-sm-1">
-                    <h4 class="font-semibold pb-3" style="color: white">Quick Links</h4>
-                    <p style="font-size: 10pt; color: #aaa">Causes</p>
-                    <p style="font-size: 10pt; color: #aaa">Blogs</p>
-                    <p style="font-size: 10pt; color: #aaa">Contact</p>
-                    <p style="font-size: 10pt; color: #aaa">Post a Job</p>
-                    <p style="font-size: 10pt; color: #aaa">Vacancies</p>
-                    <p style="font-size: 10pt; color: #aaa">Events</p>
-                    <p style="font-size: 10pt; color: #aaa">Workshops</p>
+                <div class="flex flex-col ">
+                    <h1 class="font-[500] font-montserrat mb-2 ">Quick Links</h1>
+                    <a href="#">Causes</a>
+                    <a href="#">Jobs</a>
+                    <a href="#">About Us</a>
+                    <a href="#">Blog</a>
+                    <a href="#">Contact us</a>
                 </div>
-                <div class="col-lg-2 offset-sm-1">
-                    <div class="col-lg-2">
-                        <h4 class="font-semibold pb-3" style="color: white">Social Media</h4>
-                        <p style="font-size: 10pt; color: #aaa">Facebook</p>
-                        <p style="font-size: 10pt; color: #aaa">Instagram</p>
-                        <p style="font-size: 10pt; color: #aaa">LinkIn</p>
-                        <p style="font-size: 10pt; color: #aaa">WhatsApp</p>
+                <div>
+                    Follow us on social media
+                    <div class="flex justify-center gap-6 mt-4 mb-4">
+                        <a href="https://facebook.com/yourpage" target="_blank"
+                            class="text-gray-600 hover:text-blue-400 transition text-3xl">
+                            <i class="fab fa-facebook"></i>
+                        </a>
+                        <a href="https://twitter.com/yourpage" target="_blank"
+                            class="text-gray-500 hover:text-sky-300 transition text-3xl">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="https://instagram.com/yourpage" target="_blank"
+                            class="text-gray-500 hover:text-pink-300 transition text-3xl">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="https://linkedin.com/yourpage" target="_blank"
+                            class="text-gray-800 hover:text-blue-600 transition text-3xl">
+                            <i class="fab fa-linkedin"></i>
+                        </a>
+                    </div>
 
-                    </div>
+
+                    <p>Terms & Conditions</p>
+                    <p>Privacy Policy</p>
+
+
+
+                    <p class="text-gray-300 mt-5">©️ #2026</p>
                 </div>
             </div>
-
 
         </div>
     </section>
@@ -261,33 +271,6 @@
 
 
 
-<!--owl carousel script -->
-<script>
-    $(".ocarousel").owlCarousel({
-        margin: 10,
-        loop: true,
-        autoplay: false,
-        responsive: {
-            0: {
-                items: 1,
-                nav: false
-            },
-            600: {
-                items: 2,
-                nav: false
-            },
-            1000: {
-                items: 3,
-                nav: false
-            },
-
-        }
-    });
-
-
-
-
-</script>
 
 <script>
     tinymce.init({

@@ -8,6 +8,9 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 
+import anime from 'animejs/lib/anime.es.js';
+
+
 Swiper.use([Navigation, Pagination, Autoplay]);
 document.addEventListener('DOMContentLoaded', () => {
   new Swiper('.mySwiper', {
@@ -28,6 +31,19 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 
+
+
+window.animateProgressBars = function() {
+    document.querySelectorAll('.progress-bar').forEach(el => {
+        const percent = el.dataset.percent;
+        anime({
+            targets: el,
+            width: percent + '%',
+            easing: 'easeOutCubic',
+            duration: 2000,
+        });
+    });
+};
 
 
 window.Alpine = Alpine;

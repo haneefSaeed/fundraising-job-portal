@@ -16,6 +16,8 @@
         "vite": "^2.9.11"
     },
     "dependencies": {
+        "animejs": "^4.3.6",
+        "flowbite": "^4.0.1",
         "swiper": "^12.1.1"
     }
 }
