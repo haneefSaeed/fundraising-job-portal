@@ -1,75 +1,37 @@
 @extends('layouts.app')
 @section('header')
-    <title>Home : AfgCODE Fundraising</title>
-        <!-- Styles -->
-        <style>
-            body {
-                background-image: url("{{asset('images/bg.jpg')}}");
-                background-repeat: no-repeat;
-                background-attachment: fixed;
-                -webkit-background-size: cover;
-                -moz-background-size: cover;
-                -o-background-size: cover;
-                background-size: cover;
-
-            }
-            .nounderline {
-                text-decoration: none;
-            }
-            h1, h2, h3, h4, h5 {
-                color:black;
-            }
-
-        </style>
-
+    <title>RaiseBridge Home</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
+    
 @endsection
+
 
 @section('content')
 
-    <section id="slider">
-
-        <div id="carouselExampleCaptions" class="carousel slide " data-bs-ride="carousel">
-            <div class="carousel-indicators">
-                <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-                <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1" aria-label="Slide 2"></button>
-                <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2" aria-label="Slide 3"></button>
-            </div>
-            <div class="carousel-inner ">
-                @php
-                    $x=0;
-                @endphp
-                @foreach($slides as $slide)
-                    @if($slide->sdr_isPublished == 1)
-                        @if($x==0)
-                            <div class="carousel-item active">
-                                <img src="{{$slide->sdr_imageURL}}" class="d-block w-100"  alt="...">
-                                <div class="carousel-caption-{!!$slide->sdr_align!!}  d-none d-md-block">
-                                    <h1 style=" color:white; text-shadow:2px 2px 5px #000; font-size: 35pt; font-family:Segoe UI, Tahoma, Geneva, Verdana, sans-serif;"><strong>{{$slide->sdr_title}}</strong></h1>
-                                    <h3 style="color: white;text-shadow:2px 2px 5px #000;">{{$slide->sdr_description}}</h3>
-                                </div>
-                            </div>
-                            @php $x++ @endphp
-                        @else
-                            <div class="carousel-item">
-                                <img src="{{$slide->sdr_imageURL}}" class="d-block w-100"  alt="...">
-                                <div class="carousel-caption-{!!$slide->sdr_align!!} d-none d-md-block">
-                                    <h1 style=" color:white; text-shadow:2px 2px 5px #000;font-size: 35pt; font-family:Segoe UI, Tahoma, Geneva, Verdana, sans-serif;"><strong>{{$slide->sdr_title}}</strong></h1>
-                                    <h3 style="color: white;text-shadow:2px 2px 5px #000;">{{$slide->sdr_description}}</h3>
-                                </div>
-                            </div>
-                        @endif
-                    @endif
-                @endforeach
-            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Previous</span>
-            </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Next</span>
-            </button>
+  <section id="slider" class="my-6">
+    <div class="swiper-container">
+        <div class="swiper-wrapper">
+            @foreach($slides as $slide)
+                @if($slide->sdr_isPublished)
+                <div class="swiper-slide relative">
+                    <img src="{{ $slide->sdr_imageURL }}" class="w-full h-96 object-cover" alt="Slide">
+                    <div class="absolute inset-0 flex flex-col items-center justify-center text-center text-white bg-black/40">
+                        <h1 class="text-4xl font-bold drop-shadow-lg">{{ $slide->sdr_title }}</h1>
+                        <h3 class="text-xl mt-2 drop-shadow">{{ $slide->sdr_description }}</h3>
+                    </div>
+                </div>
+                @endif
+            @endforeach
         </div>
-    </section>
+
+        <!-- Pagination -->
+        <div class="swiper-pagination"></div>
+
+        <!-- Navigation -->
+        <div class="swiper-button-next text-white"></div>
+        <div class="swiper-button-prev text-white"></div>
+    </div>
+</section>
 
     <section id="services">
         <div class="row p-5" style="background-color: #eee">
@@ -230,7 +192,8 @@
                                     <p class="card-text">@php
                                             $count = \App\Models\categories::where('cat_root' , '=',$cat->id)->count();
                                         echo $count;
-                                            @endphp</p>
+                                            @endphp
+                                            </p>
                                 </div>
                             </div>
                         </div>
@@ -350,3 +313,21 @@
 @endsection
 
 
+<script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+<script>
+    const swiper = new Swiper('.swiper-container', {
+        loop: true,
+        autoplay: {
+            delay: 5000,
+            disableOnInteraction: false,
+        },
+        pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+        },
+        navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+        },
+    });
+</script>
