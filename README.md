@@ -7,58 +7,124 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
-## About Laravel
+## About Tagheer (Change) 
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+ A complete solution for NGOs to manage fundraisings, and job portal that allow the users to create profile and start their fundraising or donating, or maybe post a job or simply find one. All and more in one place, this web application is perfect for NGOs. Main features include
+Main Features:
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- Post a new Job button
+- Start a new fundraising button
+- User profile
+- Menu
+- Dynamic Slideshow
+- Animated Services boxes flipped
+- Cause carousel showing recent or trendy cause
+- Job Categories
+- Subscribe to newsletter
+- Latest blog posts
+- Sponsors logos
+- Footer
+- Navigation system
+- User Front page
+- Admin Back Page
+- User friendly Design
+- Post View Counts
+- Token based Authentication System
+  
+## Causes (fundraising):
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- List of Causes (Fundraising cards)
+- Search or Filter Causes
+- Top Contributors
+- Cause doners list
+- Raised/ Achieved and Goal details for each cause
+- Fundraiser profile
+- Follow up posts for each cause
+- Add Donation button
+- Add follow up button only displayed to cause owner
+- Related causes
+- Start New Fundraising as company or individual
 
-## Learning Laravel
+## Jobs:
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+- Job Filter by Name Category
+- Elegant header
+- Job Categories and Sub Categories (Engineering -> Electrical Engineering)
+- Latest Jobs carousel
+- Post a New Job section button
+- List of Jobs by Category
+- Search and Filter by Category, Name, date
+- Job Detail Page consisting on vacancy information, requirement
+- Apply button
+- Total seen count and number of applicants are displayed
+- Create professional Profile if not exist
+- Message to hiring team, and upload CV option on Apply
+- Display related jobs
+- Post a new Job
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## User Profile:
 
-## Laravel Sponsors
+- Overall Statistic
+- User Picture
+- Update user information form
+- Professional Information form for Job seeking (CV, Education, Cover Letter)
+- Professional Company Information form for Applying Job (company detail)
+- My donations Information List, with messages received from beneficiaries
+- Applied Job List with status, reply message by hiring team, detail and Job Link
+- Posted Jobs List displaying status, views, applicants
+- Posted Job Detail (List of Applicants, Job Editing form, Message to applicants, cv, etc)
+- Posted Donation Detail (Status, list of donors, add or edit cause or follow-up details)
+- Read messages from applicants, donors, or reply to messages.
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+## Admin:
 
-### Premium Partners
+- User Registration Control
+- User Login Control
+- Admin Page Login
+- User Page Login
+- Admin Dashboard
+- Overall Statistics (Fundrisings, Jobs, Blog)
+- Fundraising Verification (Verify or Reject)
+- Create Categories
+- View list of Donations
+- View List of All Jobs Posted
+- Verify or Reject Jobs
+- Add or Remove Job Category
+- Add or Remove Blogs
+- Add or Remove Blog Category
+- Register new Employees
+- Manage Employee Roles
+- Edit website configuration
+- Edit slider and service boxes
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+## Accounting:
 
-## Contributing
+- Expense and Income management
+- Create financial journals for company operation cost
+- Financial Transaction Verification system
+- Journal and Log system
+- Transaction Reports
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## Installation Guide 
 
-## Code of Conduct
+# For Windows
+1. Download & Install XAMPP
+2. Download & Install Composer
+3. Download & Install NodeJs
+4. Import the Database located in (Database/charty.sql) to phpmyadmin
+    Visit phpMyAdmin:
+    http://localhost/phpmyadmin
+    Click New
+    Create a database named: charty
+    Open the database
+    Go to Import tab
+    Choose the file: database/charty.sql
+    Click Go
+5. Configure .env for your database
+    DB_DATABASE=charty
+    DB_USERNAME=root
+    DB_PASSWORD=
+6. on project directory run command : php artisan serve
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
 
-## Security Vulnerabilities
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
