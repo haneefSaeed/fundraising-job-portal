@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CausesController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,6 +17,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name("homepage");
 
+Route::patch('p/u/{id}', [App\Http\Controllers\ProfileController::class, 'update'])->name('p.update');
 
 Route::resource('p', App\Http\Controllers\profileController::class)->middleware('auth');
 Route::post('p/ajax/{id}', [App\Http\Controllers\profileController::class, 'ajax'])->name('p.ajax');
@@ -24,11 +26,16 @@ Route::post('p/ajax/{id}', [App\Http\Controllers\profileController::class, 'ajax
 //Route::get('/p/{user_id}', [App\Http\Controllers\profileController::class, 'index'])->name('profile.show');
 
 
+
 Route::get('/c/', [App\Http\Controllers\CausesController::class, 'index'])->name('causes');
+Route::get('/c/search', [CausesController::class, 'search'])->name('c.search');
 Route::get('c/create', [App\Http\Controllers\CausesController::class, 'create'])->name('c.create')->middleware('web');
 Route::get('c/{c_id}', [App\Http\Controllers\CausesController::class, 'show'])->name('c.show');
 Route::post('c', [App\Http\Controllers\CausesController::class, 'store'])->name('c.store')->middleware('web');
 Route::delete('c/{id}', [App\Http\Controllers\CausesController::class, 'destroy'])->name('c.destroy');
+
+
+
 
 
 
@@ -59,25 +66,21 @@ require __DIR__ . '/auth.php';
 //Admin
 
 
-Route::namespace("Admin")->prefix("admin")->name("admin.")->group(function(){
-    Route::namespace("Auth")->middleware('guest:admin')->group(function(){
+Route::namespace("Admin")->prefix("admin")->name("admin.")->group(function () {
+    Route::namespace("Auth")->middleware('guest:admin')->group(function () {
         //middleware guest:admin will prevent login screen after login
         //Login Route
         Route::get('login', [App\Http\Controllers\Admin\Auth\AuthenticatedSessionController::class, 'create'])->name('login');
         Route::post('login', [App\Http\Controllers\Admin\Auth\AuthenticatedSessionController::class, 'store'])->name('adminlogin');
-
     });
-    Route::middleware('admin')->group(function(){
+    Route::middleware('admin')->group(function () {
         Route::get('/', [App\Http\Controllers\Admin\AdminController::class, 'dashboard'])->name('Dashboard');
-
     });
     Route::get('logout', [App\Http\Controllers\Admin\Auth\AuthenticatedSessionController::class, 'destroy'])->name('logout');
-
-
 });
 
 
-Route::group(['prefix'=>'admin'], function(){
+Route::group(['prefix' => 'admin'], function () {
     Route::resource('slider', App\Http\Controllers\Admin\AdminsliderController::class);
     Route::resource('service', App\Http\Controllers\Admin\AdminServiceController::class);
     Route::resource('blog', App\Http\Controllers\Admin\AdminBlogController::class);
@@ -118,13 +121,10 @@ Route::group(['prefix'=>'admin'], function(){
 
     //Admin Transactions
     Route::get('dtransactions', [App\Http\Controllers\Admin\AdminTransactionController::class, 'draftIndex']);
-    Route::get('transactions/cancel/{trans_id}',[App\Http\Controllers\Admin\AdminTransactionController::class, 'cancel'])->name('transactions.cancel');
-    Route::get('transactions/approve/{trans_id}',[App\Http\Controllers\Admin\AdminTransactionController::class, 'approve'])->name('transactions.approve');
+    Route::get('transactions/cancel/{trans_id}', [App\Http\Controllers\Admin\AdminTransactionController::class, 'cancel'])->name('transactions.cancel');
+    Route::get('transactions/approve/{trans_id}', [App\Http\Controllers\Admin\AdminTransactionController::class, 'approve'])->name('transactions.approve');
 
     //Reports
     Route::get('report', [App\Http\Controllers\Admin\AdminReportController::class, 'index']);
     Route::get('report/generate', 'App\Http\Controllers\Admin\AdminReportController@show')->name('report.show');
-
 });
-
-

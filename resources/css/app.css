@@ -1,6 +1,11 @@
+@import "flip.css";
+
+@import "fonts.css";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@import "flip.css";
 
-@import 'fonts.css';
+.body {
+    font: "workSans";
+}
