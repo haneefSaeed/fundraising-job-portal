@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class company_profile extends Model
 {
     use HasFactory;
+     protected $guarded = [];
 
     public function job(){
         return $this->hasOne(Job::class);

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CausesController;
+use App\Http\Controllers\jobController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -22,7 +23,7 @@ Route::patch('p/u/{id}', [App\Http\Controllers\ProfileController::class, 'update
 Route::resource('p', App\Http\Controllers\profileController::class)->middleware('auth');
 Route::post('p/ajax/{id}', [App\Http\Controllers\profileController::class, 'ajax'])->name('p.ajax');
 
-//Route::post('/p', [App\Http\Controllers\profileController::class, 'store'])->name('profile.store');
+Route::post('/p/store', [App\Http\Controllers\profileController::class, 'store'])->name('p.store');
 //Route::get('/p/{user_id}', [App\Http\Controllers\profileController::class, 'index'])->name('profile.show');
 
 
@@ -40,9 +41,10 @@ Route::delete('c/{id}', [App\Http\Controllers\CausesController::class, 'destroy'
 
 
 
-Route::get('/j/', [App\Http\Controllers\JobController::class, 'index'])->name('jobs');
+Route::get('/j', [App\Http\Controllers\JobController::class, 'index'])->name('jobs');
+Route::get('/j/search', [App\Http\Controllers\JobController::class, 'search'])->name('j.search');
 Route::get('/j/cat/{job_cat_id}', [App\Http\Controllers\JobController::class, 'show_cat'])->name('j.showcat');
-Route::post('j', [App\Http\Controllers\JobController::class, 'store'])->name('j.store')->middleware('web');
+Route::post('/j/store', [jobController::class, 'store'])->name('j.store');
 
 Route::get('j/post', [App\Http\Controllers\JobController::class, 'create'])->name('j.create');
 Route::get('/j/{job_id}', [App\Http\Controllers\JobController::class, 'show_job'])->name('j.show');

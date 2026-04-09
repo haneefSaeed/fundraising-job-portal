@@ -63,9 +63,10 @@ class CausesController extends Controller
         }
 
         // The related causes will be selected based on the category and take function is used to limit only four records
-        $all_related = causes::all()->sortByDesc('seenctr')->where('cause_cat_id', '=', ($cause->cause_cat_id))->take(4);
-
-
+        // $all_related = causes::all()->sortByDesc('seenctr')->where('cause_cat_id', '=', ($cause->cause_cat_id))->take(4);
+        $all_related = causes::all()->take(4);
+        
+        
         return view('Cause.show', [
             'cause' => $cause,
             'followup' => $followups,

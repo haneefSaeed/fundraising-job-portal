@@ -90,58 +90,64 @@ class profileController extends Controller
 
     public function store(Request $req)
     {
+        if (!Auth::check()) {
+            return redirect()->back()->with('msg', 'You must be logged in.');
+        }
+
+        $userId = Auth::id();
+
         if ($req->has('btn_submit_career_info')) {
-            $validateCareerInfo = Validator::make($req->all(), [
-                'statement' => 'required',
-                'career_id' => 'required',
-                'cv' => 'required',
+
+            // ✅ Validation
+            $validator = Validator::make($req->all(), [
+                'statement' => 'required|string',
+                'career_id' => 'required|integer|exists:career_levels,id',
+                'cv' => 'required|file|mimes:pdf,doc,docx',
+                'd' => 'nullable|file|mimes:pdf,doc,docx',
+                'other_doc' => 'nullable|file|mimes:pdf,doc,docx',
+                'edu_id' => 'required|integer|exists:edu_levels,id',
+                'total_exp' => 'required|integer|min:0',
             ]);
-            if ($validateCareerInfo->fails()) {
-                return Redirect::back()->withErrors($validateCareerInfo);
-            } else {
-                prof_profile::create([
-                    'current_position' => request('current_position'),
-                    'current_company' => request('current_company'),
-                    'location' => request('location'),
-                    'statement' => request('statement'),
-                    'career_id' => request('career_id'),
-                    'user_id' => request('user_id'),
-                    'edu_id' => request('edu_id'),
-                    'total_exp' => request('total_exp')
-                ]);
-                if ($req->cv != '') {
-                    $folder = '/Documents/Job/' . $req->user_id . '/cv/';
-                    $path = public_path() . $folder;
 
-                    //upload new file
-                    $file = $req->cv;
-                    $filename = $file->getClientOriginalName();
-                    $file->move($path, $filename);
-                    prof_profile::where('user_id', $req->user_id)->update(['cv' => $folder . $filename]);
-                }
-                if ($req->cl != '') {
-                    $folder = '/Documents/Job/' . $req->user_id . '/cl';
-                    $path = public_path() . $folder;
-
-                    //upload new file
-                    $file = $req->cl;
-                    $filename = $file->getClientOriginalName();
-                    $file->move($path, $filename);
-                    prof_profile::where('user_id', $req->user_id)->update(['cl' => $folder . $filename]);
-                }
-                if ($req->other_doc != '') {
-                    $folder = '/Documents/Job/' . $req->user_id . '/other_docs';
-                    $path = public_path() . $folder;
-
-                    //upload new file
-                    $file = $req->other_doc;
-                    $filename = $file->getClientOriginalName();
-                    $file->move($path, $filename);
-                    prof_profile::where('user_id', $req->user_id)->update(['other_doc' => $folder . $filename]);
-                }
-
-                return redirect('/j');
+            if ($validator->fails()) {
+                return redirect()->back()->withErrors($validator)->withInput();
             }
+
+            // ✅ Create profile
+            $profile = prof_profile::create([
+                'current_position' => $req->current_position ?? 'None',
+                'current_company' => $req->current_company ?? 'None',
+                'location' => $req->location ?? 'None',
+                'statement' => $req->statement,
+                'career_id' => $req->career_id,
+                'user_id' => $userId,
+                'edu_id' => $req->edu_id,
+                'total_exp' => $req->total_exp,
+            ]);
+
+            // ✅ Handle file uploads
+            $files = ['cv', 'cl', 'other_doc'];
+
+            foreach ($files as $fileKey) {
+                if ($req->hasFile($fileKey)) {
+                    $folder = "/Documents/Job/{$userId}/{$fileKey}/";
+                    $path = public_path($folder);
+
+                    if (!file_exists($path)) {
+                        mkdir($path, 0755, true);
+                    }
+
+                    $file = $req->file($fileKey);
+                    $filename = time() . '_' . $file->getClientOriginalName();
+                    $file->move($path, $filename);
+
+                    $profile->update([
+                        $fileKey => $folder . $filename
+                    ]);
+                }
+            }
+
+            return redirect('/j')->with('msg', 'Profile completed successfully.');
         } else if ($req->has('store_new_company_info')) {
 
             $validatorCompInfo = Validator::make($req->all(), [
@@ -231,7 +237,7 @@ class profileController extends Controller
             'mydonations' => $mydonations,
             'myfrs' => $myfrs,
             'cprof' => $comp_profile,
-            'career_info' => $prof_profile,
+            'profProfile' => $prof_profile,
             'careers' => $careers,
             'edu_levels' => $edu_level,
             'AppJobs' => $jobsApplied,
@@ -257,7 +263,7 @@ class profileController extends Controller
                         'name' => 'required|string|max:255',
                         'dob' => 'nullable|date',
                         'phone' => 'nullable|numeric',
-                        'gender'=>'nullable',
+                        'gender' => 'nullable',
                         'username' => 'required|string|max:50|unique:users,username,' . $user->id,
                         'password' => 'nullable|string|min:6|confirmed',
                     ]);
@@ -266,7 +272,7 @@ class profileController extends Controller
                         'name' => $validated['name'],
                         'dob' => $validated['dob'] ?? $user->dob,
                         'phone' => $validated['phone'] ?? $user->phone,
-                        'gender'=> $validated['gender']?? $user->gender,
+                        'gender' => $validated['gender'] ?? $user->gender,
                         'username' => $validated['username'],
                         'password' => $validated['password'] ? bcrypt($validated['password']) : $user->password,
                     ]);
@@ -281,7 +287,7 @@ class profileController extends Controller
 
 
 
-        if ($req->form === 'career'){
+        if ($req->form === 'career') {
             dd($req);
         }
     }

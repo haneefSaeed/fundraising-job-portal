@@ -1,483 +1,417 @@
 @extends('layouts.app')
+
 @section('header')
-    <title>Show single job</title>
-
-
-    <!-- Styles -->
-    <style>
-        .font-s{
-            font-size: 10pt;
-        }
-        .font-i {
-            font-size:10pt;
-            color: #444444;
-        }
-        }
-        .text-justify {
-            text-align: justify;
-        }
-
-        body {
-            background-color: #fff;
-
-        }
-
-
-    </style>
-
-    <style>
-
-        .blog-container {
-            background: #fff;
-            border-radius: 2px;
-            box-shadow: rgba(0, 0, 0, 0.2) 0 4px 2px -2px;
-            font-weight: 100;
-            width: 100%;
-        }
-        @media screen and (min-width: 480px) {
-            .blog-container {
-                width: 28rem;
-            }
-        }
-        @media screen and (min-width: 767px) {
-            .blog-container {
-                width: 40rem;
-            }
-        }
-        @media screen and (min-width: 959px) {
-            .blog-container {
-                width: 50rem;
-            }
-        }
-
-        .blog-container a {
-            color: #333;
-            text-decoration: none;
-            transition: 0.25s ease;
-        }
-        .blog-container a:hover {
-            border-color: #777;
-            color: #777;
-        }
-
-
-
-
-        .blog-title h2 a {
-            color: #222;
-        }
-
-        .blog-summary p {
-            color: #4d4d4d;
-        }
-
-        .blog-tags ul {
-            display: flex;
-            flex-direction: row;
-            flex-wrap: wrap;
-            list-style: none;
-            padding-left: 0;
-        }
-
-        .blog-tags li + li {
-            margin-left: 0.5rem;
-        }
-
-        .blog-tags a {
-            border: 1px solid #999999;
-            border-radius: 3px;
-            color: #999999;
-            height: 1.5rem;
-            line-height: 1.5rem;
-            letter-spacing: 1px;
-            padding: 0 0.5rem;
-            text-align: center;
-            text-transform: uppercase;
-            white-space: nowrap;
-            width: 5rem;
-        }
-
-    </style>
-
+<title>Jobs | {{ $job->title }}</title>
 @endsection
-
 
 @section('content')
-    @if($job->status == 0)
-        <script>
-            window.location.href= '{{route('jobs')}}';
-            </script>
+
+@if($job->status == 0)
+<script>
+    window.location.href = `{{ route('jobs') }}`;
+</script>
+@endif
+
+{{-- BREADCRUMBS --}}
+<section class="bg-gray-100 py-8">
+    <div class="container mx-auto px-4 text-center">
+        <p class="text-sm text-gray-600 mb-2">
+            You are here / <a href="../" class="text-blue-600 hover:underline">Home</a> /
+            <a href="./" class="text-blue-600 hover:underline">Jobs</a> / {{ $job->title }}
+        </p>
+        <h1 class="text-3xl font-bold mb-2 text-gray-800">{{ $job->title }}</h1>
+        <p class="text-gray-700 mb-2">{{ $job->small_description }}</p>
+        <p class="text-gray-700 mb-4"><span class="font-semibold">{{ \App\Models\application::where('vac_id', $job->id)->count() }}</span> Applicants applied</p>
+
+        @if(Session::has('msg'))
+        <div class="mx-auto w-3/4 md:w-1/2 bg-green-100 text-green-800 p-3 rounded flex items-center justify-center">
+            <i class="fa fa-info-circle mr-2"></i> {{ Session::get('msg') }}
+        </div>
         @endif
-    <section id="breadcrumbs">
 
-        <div class="row p-3 mb-3 " style="background-color: #eee; color:white;">
-            <div class="container">
-                <div class="row m-3 text-center text-black">
-
-                    <h1>{{$job->title}}</h1>
-                    <p style="font-size:10pt;">You are here / <a href="../" class="nounderline">home </a> / <a href="./" class="nounderline">Jobs </a> / {{$job->title}}</p>
-                    <p>{{$job->small_description}}</p>
-                    <p><span style ="font-weight: 600">{{\App\Models\application::where('vac_id' , '=', $job->id)->count()}}</span> Applicants applied.</p>
-                    @if(Session::has('msg'))
-                    <div class="alert alert-success w-50">
-                        <i class="fa fa-info-circle"></i> Your application was submitted sucessfully
-                    </div>
-                        @endif
-                </div>
-            </div>
+        @if(Session::has('error'))
+        <div class="mx-auto w-3/4 md:w-1/2 bg-red-100 text-red-800 p-3 rounded flex items-center justify-center">
+            <i class="fa fa-exclamation-circle mr-2"></i> {{ Session::get('error') }}
         </div>
-    </section>
-
-    <section id="jobDetails">
-        <div class="container">
-            <div class="row p-1">
-                <!-- job items section -->
-                <div class="col-md-9">
-<style>
-
-                        .job-container {
-                            background: #fff;
-                            border-radius: 2px;
-                            box-shadow: rgba(0, 0, 0, 0.2) 0 4px 2px -2px;
-                            font-weight: 100;
-                            width: 100%;
-                        }
-                        @media screen and (min-width: 480px) {
-                            .job-container {
-                                width: 28rem;
-                            }
-                        }
-                        @media screen and (min-width: 767px) {
-                            .job-container {
-                                width: 40rem;
-                            }
-                        }
-                        @media screen and (min-width: 959px) {
-                            .job-container {
-                                width: 50rem;
-                            }
-                        }
-
-                        .job-container a {
-                            color: #333;
-                            text-decoration: none;
-                            transition: 0.25s ease;
-                        }
-                        .job-container a:hover {
-                            border-color: #777;
-                            color: #777;
-                        }
-
-                        .job-cover {
-                            border-radius: 2px 2px 0 0;
-                            height: 28rem;
-                            margin-bottom: 20px;
-                            box-shadow: inset rgba(0, 0, 0, 0.2) 0 64px 64px 16px;
-
-                        }
-
-
-                        .job-body {
-                            margin: 0 auto;
-                            width: 92%;
-                        }
-
-
-                        .job-title h2 a {
-                            color: #222;
-                        }
-
-                        .job-summary p {
-                            color: #4d4d4d;
-                        }
-
-                        .job-tags ul {
-                            display: flex;
-                            flex-direction: row;
-                            flex-wrap: wrap;
-                            list-style: none;
-                            padding-left: 0;
-                        }
-
-                        .job-tags li + li {
-                            margin-left: 0.5rem;
-                        }
-
-                        .job-tags a {
-                            border: 1px solid #999999;
-                            border-radius: 3px;
-                            color: #999999;
-                            height: 1.5rem;
-                            line-height: 1.5rem;
-                            letter-spacing: 1px;
-                            padding: 0 0.5rem;
-                            text-align: center;
-                            text-transform: uppercase;
-                            white-space: nowrap;
-                            width: 5rem;
-                        }
-
-
-                    </style>
-                    <div class="job-container bg-light shadow-none w-100 mb-3">
-
-                        <div class="job-header">
-                            <div class="job-cover" style=" background: url('{{asset($job->img)}}'); background-size: cover ;">
-                            </div>
-                        </div>
-
-                        <div class="job-body">
-                            <div class="job-title">
-
-                                <h3></h3>
-
-
-                            </div>
-                            <div class="job-summary pt-3 pb-3" >
-                                <div class=" row pb-2 font-i" >
-                                    <div class="col-md-3 ">
-                                        <i class="fa fa-calendar "></i> {{$job->Posted_date}}
-                                    </div>
-                                    <div class="col-md-2 ">
-                                        <i class="fa fa-user "></i> {{ucfirst(strtolower($job->company_profile->name))}}
-                                    </div>
-                                    <div class="col-md-2">
-                                        <i class="fa fa-folder "></i> {{$job->category->cat_name}}
-                                    </div>
-                                    <div class="col-md-2 ">
-                                        <i class="fa fa-eye "></i> {{$job->seenctr}}
-                                    </div>
-                                    <div class="col-md-3 ">
-                                        <i class="fa fa-location-arrow "></i> {{$job->location}}
-                                    </div>
-
-
-                                </div>
-
-
-                                <div class="job-description row text-justify mt-2">
-<style>
-    th {
-        font-weight: 600;
-    }
-</style>
-                                    <table class="table table-striped">
-                                      <tr>
-                                          <th>Employment Type: </th>
-                                          <td>{{$job->emp_type->detail}}</td>
-                                          <th>Vacancy No. </th>
-                                          <td>{{$job->reference}}</td>
-                                      </tr>
-                                        <tr>
-                                            <th>Remote Job</th>
-                                            <td>
-                                                @if($job->is_remote == 1)
-                                                    Yes
-                                                    @else
-                                                No
-                                                    @endif
-
-                                            </td>
-                                            <th>Gender</th>
-                                            <td>{{$job->pref_gender}}</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Minimum Experience</th>
-                                            <td>{{$job->exp_level->detail}}</td>
-                                            <th>Minimum Education</th>
-                                            <td>{{$job->edu_level->detail}}</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Company Size</th>
-                                            <td>{{$job->company_profile->comp_size->range}}</td>
-                                            <th>Expires on</th>
-                                            <td>{{$job->closing_date}}</td>
-                                        </tr>
-                                    </table>
-                                    <style>
-                                        ul li {
-                                            list-style-type: disc;
-                                            margin-left: 15px;
-                                            font-size: 11pt;
-                            }
-                            </style>
-
-                            {!! $job->description !!}
-
-{{--                      <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#ApplyJobModal"><i class="fa fa-file" style="margin-right: 5px;"> </i> Apply Now </button>--}}
-
-                            <!--
-
-                            -->
-{{--                            @if(\App\Models\application::where('prof_prof_id', '=', \App\Models\prof_profile::where('user_id', '=', Auth()->user()->id)->first()->id)--}}
-{{--                            ->where('vac_id', '=',$job->id)->count()<1)--}}
-{{--                                @if($job->company_profile->user->id!=Auth()->user()->id)--}}
-                                    <div class="row mx-auto w-25 p-3" >
-                                    <button class="btn btn-success" id="btn_apply_now" onclick="checkUser()"><i class="fa fa-file" style="margin-right: 5px;"> </i> Apply Now </button>  </div>
-{{--                                @endif--}}
-{{--                            @else--}}
-{{--                                <div class="row mx-auto w-75 p-3" >--}}
-{{--                                <div class="alert alert-warning"> <i class="fa fa-warning"></i> You've already apply to this job! click <a href="{{route('p.show', encrypt(Auth()->user()->id))}}">Here</a> to visit your Profile </div>--}}
-{{--                                </div>--}}
-{{--                            @endif--}}
-
-
-  </div>
+        @endif
     </div>
+</section>
+
+{{-- JOB DETAILS --}}
+<section class="py-12 flex justify-center items-center">
+    <div class="w-3/4">
+        <div class="container mx-auto px-4 grid grid-cols-1 lg:grid-cols-9 gap-8">
+
+            {{-- Main Job Details --}}
+            <div class="lg:col-span-6 space-y-6">
+
+                <!-- {{-- Job Image --}}
+                @if(!Str::contains($job->img, 'images/u/default'))
+                <div class="w-full rounded shadow overflow-hidden h-80 bg-cover bg-center" style="background-image: url('{{ asset($job->img) }}')"></div>
+                @endif -->
+
+                {{-- Job Meta Info --}}
+                <div class="flex gap-3 justify-between ">
+
+                    <div class="flex items-center  gap-3">
+                        <div class="w-10 h-10 flex items-center justify-center rounded-full bg-blue-100 text-blue-600">
+                            <i class="fa fa-calendar"></i>
                         </div>
+                        <span class="font-semibold text-gray-800">{{ $job->created_at->diffForHumans() }}</span>
+                    </div>
+
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 flex items-center justify-center rounded-full bg-green-100 text-green-600">
+                            <i class="fa fa-user"></i>
+                        </div>
+                        <span class="font-semibold text-gray-800">
+                            {{ ucfirst(strtolower($job->company_profile->name)) }}
+                        </span>
+                    </div>
+
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 flex items-center justify-center rounded-full bg-purple-100 text-purple-600">
+                            <i class="fa fa-folder"></i>
+                        </div>
+                        <span class="font-semibold text-gray-800">
+                            {{ $job->category->cat_name }}
+                        </span>
+                    </div>
+
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 flex items-center justify-center rounded-full bg-yellow-100 text-yellow-600">
+                            <i class="fa fa-eye"></i>
+                        </div>
+                        <span class="font-semibold text-gray-800">{{ $job->seenctr }}</span>
+                    </div>
+
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 flex items-center justify-center rounded-full bg-red-100 text-red-600">
+                            <i class="fa fa-location-arrow"></i>
+                        </div>
+                        <span class="font-semibold text-gray-800">{{ $job->location }}</span>
                     </div>
                 </div>
-<style>
-                    .reljob-card:hover {
-                        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
-                    }
-                    .reljob-card .reljob-card_img img {
-                        width: 100%;
-                        height: 100%;
-                        object-fit: cover;
-                    }
-                    .reljob-card .reljob-card_img i {
-                        position: absolute;
-                        top: 20px;
-                        right: 30px;
-                        color: #fff;
-                        font-size: 25px;
-                        transition: all 0.1s;
-                    }
-                    .reljob-card .reljob-card_img i:hover {
-                        top: 18px;
-                        right: 28px;
-                        font-size: 29px;
-                    }
-                    .reljob-card .reljob-card_content {
-                        padding: 15px;
-                    }
-                    .reljob-card .reljob-card_content .reljob-card_title-section {
-                        margin-bottom: 10px;
-                    }
-                    .reljob-card .reljob-card_content .reljob-card_title-section .reljob-card_title {
-                        margin-bottom: 8px;
-                        display: -webkit-box;
-                        -webkit-box-orient: vertical;
-                        overflow: hidden;
-                        text-overflow: ellipsis;
-                    }
-                    .reljob-card_title a {
-                        text-decoration: none;
-                    }
-                    .reljob-card .reljob-card_content .reljob-card_title-section .reljob-card-category {
-                        font-size: 10pt;
-                        display: block;
-                        text-decoration: none;
-                        color:#555555;
-                        margin:0;
-                    }
 
-                </style>
-                <!-- related posts -->
-                <div class="col-md-3">
-                    <h3>Related Jobs</h3>
-
-                    @foreach ($rel_jobs as $rel)
-                        @if($rel->id!=$job->id)
-                            <div class="reljob-card bg-white rounded-lg overflow-hidden mb-4 shadow">
-                                <div class="reljob-card_img position-relative">
-                                    <img src="{{asset($rel->img)}}" alt="">
-                                </div>
-                                <div class="reljob-card_content">
-                                    <div class="reljob-card_title-section overflow-hidden">
-                                        <h4 class="reljob-card_title"><a href="#!" class="text-dark">{{$rel->title}}</a></h4>
-                                        <div style="font-size: 9pt;">
-                                            <a href="#" class="reljob-card-category"><h5 style="color: #696cff; font-size:11pt">by {{$rel->company_profile->name}}</h5></a>
-                                            <a href="#" class="reljob-card-category"><i class="fa fa-calendar"></i> {{\Carbon\Carbon::parse($rel['Posted_date'])->diffForHumans()}}</a>
-                                            <a href="#" class="reljob-card-category"><i class="fa fa-folder"></i> {{$rel->category->cat_name}}</a>
-                                            <a href="#" class="reljob-card-category"><i class="fa fa-location-arrow"></i> {{$rel->location}}</a>
-"
-                                        </div>
-                                    </div>
-                                    <div class="reljob-card_bottom-section">
-                                        <div class="d-flex justify-content-between">
-                                            <div>{{$rel->small_description}} </div>
-
-                                        </div>
-                                        <div class="row mx-auto w-50 p-1">
-                                            <button onclick="window.location.href = ('{{$rel->id}}')" class="btn btn-sm btn-theme">read more</button>
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </div>
-                        @endif
-                    @endforeach
-
-
+                {{-- Job Table --}}
+                <div class="overflow-x-auto">
+                    <table class="table-auto w-full text-left text-sm text-gray-700 mt-4 border border-gray-200 rounded">
+                        <tbody>
+                            <tr class="border-b">
+                                <th class="py-2 px-3 font-semibold">Employment Type</th>
+                                <td class="py-2 px-3">{{ $job->emp_type->detail }}</td>
+                                <th class="py-2 px-3 font-semibold">Vacancy No.</th>
+                                <td class="py-2 px-3">{{ $job->reference }}</td>
+                            </tr>
+                            <tr class="border-b">
+                                <th class="py-2 px-3 font-semibold">Remote Job</th>
+                                <td class="py-2 px-3">{{ $job->is_remote ? 'Yes' : 'No' }}</td>
+                                <th class="py-2 px-3 font-semibold">Gender</th>
+                                <td class="py-2 px-3">{{ $job->pref_gender }}</td>
+                            </tr>
+                            <tr class="border-b">
+                                <th class="py-2 px-3 font-semibold">Minimum Experience</th>
+                                <td class="py-2 px-3">{{ $job->exp_level->detail }}</td>
+                                <th class="py-2 px-3 font-semibold">Minimum Education</th>
+                                <td class="py-2 px-3">{{ $job->edu_level->detail }}</td>
+                            </tr>
+                            <tr class="border-b">
+                                <th class="py-2 px-3 font-semibold">Company Size</th>
+                                <td class="py-2 px-3">{{ $job->company_profile->comp_size->range }}</td>
+                                <th class="py-2 px-3 font-semibold">Expires on</th>
+                                <td class="py-2 px-3">{{ $job->closing_date }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
+
+                {{-- Job Description --}}
+                <div class="prose max-w-none mt-4">
+                    {!! $job->description !!}
+                </div>
+
+                {{-- Apply Button --}}
+                {{-- Apply Button --}}
+                @if($isExpired)
+                <button disabled
+                    class="w-full bg-gray-400 text-white font-semibold px-6 py-3 rounded-xl cursor-not-allowed flex items-center justify-center">
+                    <i class="fa fa-ban mr-2"></i> Job Expired
+                </button>
+                @elseif($alreadyApplied)
+                <button disabled
+                    class="w-full bg-gray-400 text-white font-semibold px-6 py-3 rounded-xl cursor-not-allowed flex items-center justify-center">
+                    <i class="fa fa-check mr-2"></i> Already Applied
+                </button>
+                @elseif(!Auth::check())
+                <a href="{{ route('login') }}" class="w-full block text-center bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded-xl shadow">
+                    <i class="fa fa-sign-in mr-2"></i> Login to Apply
+                </a>
+                @elseif(!$profile)
+                {{-- COMPLETE PROFILE BUTTON --}}
+                <button id="showProfileFormBtn"
+                    class="bg-black hover:bg-gray-700 text-white px-4 py-2 rounded mb-4">
+                    Complete Your Profile and Apply
+                </button>
+
+                {{-- INLINE PROFILE FORM (HIDDEN BY DEFAULT) --}}
+                <div id="profileFormContainer" class="hidden bg-gray-100 p-3">
+                    <h1 class="text-2xl font-bold  mb-6">Complete Your Professional Profile</h1>
+                    <p>In order to Apply for a job, please complete your professional profile</p>
+
+                    <form method="POST" action="{{ route('p.store') }}" enctype="multipart/form-data">
+                        @csrf
+                        <div class="space-y-4">
+
+                            <input type="text" name="current_position" placeholder="Current Position "
+                                class="w-full border-0 rounded-xl px-3 py-2">
+
+                            <input type="text" name="current_company" placeholder="Current Company"
+                                class="w-full border-0 rounded-xl px-3 py-2">
+
+                            <input type="text" name="location" placeholder="Location"
+                                class="w-full border-0 rounded-xl px-3 py-2">
+
+                            <textarea name="statement" rows="4" placeholder="Professional Statement" required
+                                class="w-full border-0 rounded-xl px-3 py-2"></textarea>
+
+                            <div class="grid md:grid-cols-2 gap-4">
+                                <label class="block">
+                                    CV (PDF)
+                                    <input type="file" name="cv" accept=".pdf" class="w-full border-0 rounded-xl px-3 py-2" require>
+                                </label>
+                                <label class="block">
+                                    Cover Letter (PDF)
+                                    <input type="file" name="d" accept=".pdf" class="w-full border-0 rounded-xl px-3 py-2">
+                                </label>
+                            </div>
+
+                            <label class="block">
+                                Other Document (optional)
+                                <input type="file" name="other_doc" class="w-full border-0 rounded-xl px-3 py-2">
+                            </label>
+
+                            <select name="career_id" class="border-0 rounded-xl px-3 py-2 w-full" required>
+                                <option value="">Select Career Path</option>
+                                @foreach($careers as $career)
+                                <option value="{{ $career->id }}">{{ $career->level }}</option>
+                                @endforeach
+                            </select>
+
+                            <select name="edu_id" class="border-0 rounded-xl px-3 py-2 w-full" required>
+                                <option value="">Select Highest Education</option>
+                                @foreach($educations as $edu)
+                                <option value="{{ $edu->id }}">{{ $edu->detail }}</option>
+                                @endforeach
+                            </select>
+
+                            <input type="number" name="total_exp" placeholder="Total Years of Experience" min="0" required
+                                class="w-full border-0 rounded-xl px-3 py-2">
+
+                            <button type="submit" name="btn_submit_career_info"
+                                class="w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl font-semibold">
+                                Save Profile
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                {{-- TOGGLE SCRIPT --}}
+                <script>
+                    document.getElementById('showProfileFormBtn').addEventListener('click', function() {
+                        const form = document.getElementById('profileFormContainer');
+                        form.classList.toggle('hidden');
+                        // Optional: scroll into view
+                        if (!form.classList.contains('hidden')) {
+                            form.scrollIntoView({
+                                behavior: 'smooth'
+                            });
+                        }
+                    });
+                </script>
+                @elseif($job->company_profile->user_id == Auth::id())
+                <section id="jobApplicants" class="mt-12 bg-gray-100 p-6 rounded-lg shadow">
+                    <h3 class="text-xl font-bold mb-4">Applicants for this Job</h3>
+
+                    @if($applications->where('vac_id', $job->id)->count() > 0)
+                    @foreach($applications->where('vac_id', $job->id) as $app)
+                    <div class="border-b py-3">
+                        <p><strong>Name:</strong> {{ $app->prof_prof->user->name }}</p>
+                        <p><strong>Email:</strong> {{ $app->prof_prof->user->email }}</p>
+                        <p><strong>Message:</strong> {{ $app->message ?? 'No message' }}</p>
+
+                        <p><strong>CV:</strong>
+                            @if($app->prof_prof->cv)
+                            <a href="{{ asset('storage/'.$app->prof_prof->cv) }}" target="_blank" class="text-blue-600 underline">View CV</a>
+                            @else
+                            N/A
+                            @endif
+                        </p>
+
+                        @if($app->prof_prof->other_doc)
+                        <p><strong>Other Document:</strong>
+                            <a href="{{ asset('storage/'.$app->prof_prof->other_doc) }}" target="_blank" class="text-blue-600 underline">View</a>
+                        </p>
+                        @endif
+                    </div>
+                    @endforeach
+                    @else
+                    <p>No applicants yet.</p>
+                    @endif
+                </section>
+
+                <script>
+                    function scrollToApplicants() {
+                        const section = document.getElementById('jobApplicants');
+                        section.scrollIntoView({
+                            behavior: 'smooth'
+                        });
+                    }
+                </script>
+                @else
+                <button id="btn_apply_now" onclick="openModal()"
+                    class="w-full bg-green-600 hover:bg-green-700 text-white font-semibold px-6 py-3 rounded-xl shadow flex items-center justify-center">
+                    <i class="fa fa-paper-plane mr-2"></i> Apply Now
+                </button>
+                @endif
+
             </div>
+
+            {{-- Related Jobs --}}
+            <div class="lg:col-span-3 space-y-6">
+                <h3 class="text-xl font-bold mb-4">Related Jobs</h3>
+
+                @foreach ($rel_jobs as $rel)
+                @if($rel->id != $job->id && $rel->status ==1)
+                <div
+                    onclick="window.location.href=`{{ route('j.show', $rel->id) }}`"
+                    class="cursor-pointer bg-white flex flex-col p-4 rounded-lg shadow overflow-hidden hover:shadow-lg transition">
+                    {{-- Job Title --}}
+                    <h4 class="font-bold text-lg">{{ $rel->title }}</h4>
+
+                    {{-- Short Description --}}
+                    <div class="text-gray-700 text-sm mb-2 truncate">
+                        {{ $rel->small_description }}
+                    </div>
+
+                    {{-- Profile / Company Info --}}
+                    <div class="flex items-center gap-2 mb-2">
+                        <div class="flex items-center gap-2 border p-1 rounded-full hover:bg-gray-50">
+                            {{-- Avatar --}}
+                            <img class="w-6 h-6 rounded-full object-cover"
+                                src="{{ asset($rel->company_profile->avatar ?? 'images/u/default_avatar.png') }}"
+                                alt="avatar" />
+
+                            {{-- Name --}}
+                            @if($rel->company_profile->is_company == 0)
+                            <span class="font-semibold text-sm">{{ $rel->company_profile->name }}</span>
+                            @else
+                            <a href="{{ url('dp/'.$rel->company_profile->id) }}" class="font-semibold text-sm hover:underline">
+                                {{ Str::limit($rel->company_profile->name, 22) }}
+                            </a>
+                            @endif
+                        </div>
+                        <span class="flex items-center gap-1 text-xs font-semibold text-gray-600">
+                            {{ \Carbon\Carbon::parse($rel->Posted_date)->diffForHumans() }}
+                        </span>
+                    </div>
+
+                    {{-- Job Details --}}
+                    <div class="flex py-2 flex-wrap gap-2 font-semibold text-gray-700 text-sm justify-between">
+                        <span class="flex items-center gap-1">
+                            <a href="{{ route('j.showcat', $rel->category->id) }}">
+                                <i class="fa fa-{{ $rel->category->cat_icon }}"></i> {{ $rel->category->cat_name }}
+                            </a>
+                        </span>
+                        <span class="flex items-center gap-1">
+                            <i class="fa fa-location-arrow"></i> {{ $rel->location }}
+                        </span>
+                    </div>
+                </div>
+                @endif
+                @endforeach
+            </div>
+
         </div>
-    </section>
+    </div>
+
+</section>
+
+{{-- APPLY MODAL --}}
+<div class="hidden" id="ApplyJobModal">
+    <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div class="bg-white rounded-lg w-full max-w-lg p-6 relative">
+            <h5 class="text-xl font-bold mb-4">You're Applying for</h5>
+            <h5 class="text-lg font-semibold mb-2">{{ $job->title }}</h5>
+            <p class="text-gray-700 mb-4">Leave a note to the recruiters. (Optional)</p>
+            <form method="POST" action="{{ route('j.store') }}" enctype="multipart/form-data" class="space-y-4">
+                @csrf
+                <textarea name="message" class="w-full border rounded p-2" placeholder="Message (optional)"></textarea>
+                <input type="file" name="cv" class="w-full border rounded p-2">
+                <input type="hidden" name="user_id" value="{{ Auth::check() ? Auth::id() : -1 }}">
+                <input type="hidden" name="vac_id" value="{{ $job->id }}">
+                <div class="flex justify-end gap-2">
+                    <button type="button" onclick="closeModal()" class="px-4 py-2 rounded bg-gray-300 hover:bg-gray-400">Close</button>
+                    <button type="submit" name="btn_application_apply" class="px-4 py-2 rounded bg-green-600 hover:bg-green-700 text-white font-semibold">Apply</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
 <script>
-    function checkUser(){
-        @if(Auth::check())
-            //check login
-            @if(\App\Models\prof_profile::where('user_id' , '=', Auth()->user()->id)->first() !=null )
+    const isLoggedIn = @json(Auth::check());
+    const hasProfile = @json($profile ? true : false);
+    const alreadyApplied = @json($alreadyApplied ? true : false);
+    const isExpired = @json($isExpired ? true : false); // new flag
 
-                          @if(\App\Models\application::where('prof_prof_id', '=', \App\Models\prof_profile::where('user_id', '=', Auth()->user()->id)->first()->id)
-                          ->where('vac_id', '=',$job->id)->count()<1)
-                            $('#ApplyJobModal').modal('show');
+    function checkUser() {
+        const btn = document.getElementById('btn_apply_now');
 
-                    @else
-                        $('#btn_apply_now').attr('disabled', 'disabled');
-                        $('#btn_apply_now').html("Whoops! You've already Applied for this post!");
-                @endif
-            @else
-                //else create profile
-                window.location = '/p/' + '{!! encrypt(Auth()->user()->id)!!}?reqppp&form=job'
-            @endif
+        if (!isLoggedIn) {
+            window.location.href = "/login";
+            return;
+        }
 
-        @else
-                //else go to login
-            window.location ="/login";
-        @endif
+        if (!hasProfile) {
+            window.location.href = '/p/{{ auth()->check() ? encrypt(auth()->id()) : "" }}?reqppp&form=job';
+            return;
+        }
+
+        if (alreadyApplied) {
+            showWhoops(btn, "Whoops! Already Applied");
+            return;
+        }
+
+        if (isExpired) {
+            showWhoops(btn, "Sorry! Job Expired");
+            return;
+        }
+
+        openModal();
+    }
+
+    function showWhoops(btn, message) {
+        btn.disabled = true;
+        btn.innerText = message;
+        btn.classList.remove('bg-green-600', 'hover:bg-green-700');
+        btn.classList.add('bg-red-500', 'cursor-not-allowed');
+
+        // Optional: reset after 3 seconds
+        setTimeout(() => {
+            btn.disabled = false;
+            btn.innerText = "Apply Now";
+            btn.classList.remove('bg-red-500', 'cursor-not-allowed');
+            btn.classList.add('bg-green-600', 'hover:bg-green-700');
+        }, 3000);
+    }
+
+    function openModal() {
+        document.getElementById('ApplyJobModal').classList.remove('hidden');
+    }
+
+    function closeModal() {
+        document.getElementById('ApplyJobModal').classList.add('hidden');
     }
 </script>
-@endsection
-
-@section('footer_script')
-
-    <section id="modelapplyjob">
-        <div class="modal fade" id="ApplyJobModal" tabindex="-1" aria-labelledby="JobModal" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered ">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="ApplyJobModal">You're Applying for</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <h5>Senior Graphic Designer Needed</h5>
-                        <p class="font-s text-justify">
-                            Leave a note to the recruiters. (Optional)
-                        </p>
-                        <form class="row g-3 justify-center mb-2" method="post" action="{{route('j.store')}}">
-                            @csrf
-                            <textarea class="form-control" name="message"></textarea>
-
-                            <p>If you have different CV, please Upload here (Optional)</p>
-                            <input type="file" class="form-control" name="cv">
-                            <input type="hidden" name="user_id" value="{{(Auth::check()) ? Auth()->user()->id : -1 }}">
-                            <input type="hidden" name="vac_id" value="{{$job->id}}">
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" name="btn_application_apply" class="btn btn-success">Apply</button>
-                        </div>
-
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-    </section>
 
 @endsection
-

@@ -1,325 +1,193 @@
 @extends('layouts.app')
+
 @section('header')
-    <title>Show Category</title>
-
-
-    <!-- Styles -->
-    <style>
-        .font-s{
-            font-size: 10pt;
-        }
-        .font-i {
-            font-size:10pt;
-            color: #444444;
-        }
-        .text-justify {
-            text-align: justify;
-        }
-
-        body {
-            background-color: #fff;
-
-        }
-
-
-    </style>
-
-    <style>
-
-        .blog-container {
-            background: #fff;
-            border-radius: 2px;
-            box-shadow: rgba(0, 0, 0, 0.2) 0 4px 2px -2px;
-            font-weight: 100;
-            width: 100%;
-        }
-        @media screen and (min-width: 480px) {
-            .blog-container {
-                width: 28rem;
-            }
-        }
-        @media screen and (min-width: 767px) {
-            .blog-container {
-                width: 40rem;
-            }
-        }
-        @media screen and (min-width: 959px) {
-            .blog-container {
-                width: 50rem;
-            }
-        }
-
-        .blog-container a {
-            color: #333;
-            text-decoration: none;
-            transition: 0.25s ease;
-        }
-        .blog-container a:hover {
-            border-color: #777;
-            color: #777;
-        }
-
-
-
-
-        .blog-title h2 a {
-            color: #222;
-        }
-
-        .blog-summary p {
-            color: #4d4d4d;
-        }
-
-        .blog-tags ul {
-            display: flex;
-            flex-direction: row;
-            flex-wrap: wrap;
-            list-style: none;
-            padding-left: 0;
-        }
-
-        .blog-tags li + li {
-            margin-left: 0.5rem;
-        }
-
-        .blog-tags a {
-            border: 1px solid #999999;
-            border-radius: 3px;
-            color: #999999;
-            height: 1.5rem;
-            line-height: 1.5rem;
-            letter-spacing: 1px;
-            padding: 0 0.5rem;
-            text-align: center;
-            text-transform: uppercase;
-            white-space: nowrap;
-            width: 5rem;
-        }
-
-    </style>
-
+<title>Show Category</title>
 @endsection
-
 
 @section('content')
-    <section id="breadcrumbs">
 
-        <div class="row p-5 mb-3 " style="background-color: #eee; color:white;">
-            <div class="container">
-                <div class="row m-3 text-center text-black">
+{{-- BREADCRUMBS --}}
+<section class="bg-gray-100 py-8">
+    <div class="max-w-screen-sm mx-auto px-4 text-center">
+        <h1 class="text-3xl font-bold mb-2 text-gray-800">{{ $cat->cat_name }}</h1>
+        <p class="text-sm text-gray-600 mb-2">
+            You are here / <a href="../../" class="text-blue-600 hover:underline">Home</a> /
+            <a href="../../jobs" class="text-blue-600 hover:underline">Jobs</a> / {{ $cat->cat_name }}
+        </p>
+        <p class="text-gray-700 font-semibold text-sm">{{ $job_count }} Job(s) listed</p>
+    </div>
+</section>
 
-                        <h1>{{$cat->cat_name}}</h1>
+{{-- JOB LIST AND SIDEBAR --}}
+<section class="py-12 flex justify-center items-center">
+    <div class="w-3/4">
+        <div class="container mx-auto px-4 grid grid-cols-1 lg:grid-cols-12 gap-8">
 
+            {{-- JOB LIST --}}
+            <div class="lg:col-span-8 space-y-6">
+                @if($jobs->count() > 0)
+                @foreach($jobs as $job)
+                @if($job->status == 1)
+                <div onclick="window.location.href=`{{ route('j.show', $job->id) }}`" class="cursor-pointer bg-white flex flex-col p-4 rounded-lg shadow overflow-hidden md:flex hover:shadow-lg transition">
 
-                        <p style="font-size:10pt;">You are here / <a href="../../" class="nounderline">home </a> / <a href="../../jobs" class="nounderline">Jobs </a> / {{$cat->cat_name}} </p>
-                        <p style="font-size: 10pt; font-weight: 600;">{{$job_count}} Job(s) listed</p>
+                    {{-- Job Title --}}
+                    <h3 class="font-bold text-xl ">{{ $job->title }}</h3>
+                    <div class="mb-2">{{ $job->small_description }}</div>
+                    {{-- Profile / Company Info --}}
+                    <div class="flex items-center gap-2 mb-2">
+                        <div class="flex items-center gap-2 border p-1 rounded-full hover:bg-gray-50">
+                            {{-- Avatar --}}
+                            <img class="w-6 h-6 rounded-full object-cover"
+                                src="{{ asset($job->company_profile->avatar ?? 'images/u/default_avatar.png') }}"
+                                alt="avatar" />
+
+                            {{-- Name --}}
+                            @if($job->company_profile->is_company == 0)
+                            <span class="font-semibold text-sm">{{ $job->company_profile->name }}</span>
+                            @else
+                            <a href="{{ url('dp/'.$job->company_profile->id) }}" class="font-semibold text-sm hover:underline">
+                                {{ Str::limit($job->company_profile->name, 22) }}
+                            </a>
+                            @endif
+                        </div>
+                        <span class="flex items-center gap-1 text-xs font-semibold">
+                            Posted this </i> {{ \Carbon\Carbon::parse($job->created_at)->diffForHumans() }}
+                        </span>
+                    </div>
+
+                    {{-- Job Details --}}
+                    <div class="flex py-2 flex-wrap gap-2 font-semibold text-gray-700 text-sm  justify-between">
+                        <span class="flex items-center gap-1">
+                            <a href="{{ route('j.showcat', $job->category->id) }}"> <i class="fa fa-{{ $job->category->cat_icon }}"></i> {{ $job->category->cat_name }}</a>
+                        </span>
+                        <span class="flex items-center gap-1">
+                            <i class="fa fa-location-arrow"></i> {{ $job->location }}
+                        </span>
+
+                    </div>
+                </div>
+                @endif
+                @endforeach
+                @else
+                <div class="text-center py-12">
+                    <h4 class="text-gray-700 text-lg">Sorry, no Jobs to display yet! :(</h4>
+                </div>
+                @endif
+
+                {{-- PAGINATION --}}
+                <div class="flex justify-center mt-6">
+                    {!! $jobs->onEachSide(5)->links() !!}
                 </div>
             </div>
-        </div>
-    </section>
 
-    <section id="jobDetails">
-        <div class="container">
-            <div class="row p-1">
-                <!-- job items section -->
-                <div class="col-md-9">
+            {{-- SIDEBAR --}}
+            <div class="lg:col-span-4 space-y-6">
 
-                    <style>
+                {{-- SEARCH FORM --}}
+                <div class="bg-white p-4 rounded-lg shadow">
+                    <h3 class="text-lg font-semibold mb-4">Search</h3>
 
-                        .job-card .job-card_img img {
-                            width: 100%;
-                            height: 200px;
-                            object-fit: cover;
-                        }
+                    <form method="GET" action="{{ route('j.search') }}" class="space-y-4">
 
-                        .job-card .job-card_content {
-                            padding: 15px;
-                        }
-
-                        @media (min-width: 992px) {
-                            .job-card--vertical {
-                                display: flex;
-                                position: relative;
-                            }
-                            .job-card--vertical .job-card_img img {
-                                width: 320px;
-                                min-width: 300px;
-                                height: 100%;
-                                object-fit: cover;
-                            }
-                        }
-
-                    </style>
-                    @if($jobs->count()>0)
-                    @foreach($jobs as $job)
-                        @if($job->status==1)
-                    <div class="job-card job-card--vertical bg-light overflow-hidden mb-4">
-                        <div class="job-card_img position-relative">
-                            <img src="{{asset($job->img)}}" alt="">
+                        {{-- 🔍 Keyword --}}
+                        <div>
+                            <label class="block text-sm font-medium mb-1">Keyword</label>
+                            <input type="text"
+                                name="keyword"
+                                placeholder="Keyword"
+                                value="{{ request('keyword') }}"
+                                class="w-full bg-gray-100 border-0 rounded-full px-4 py-2 text-black placeholder:text-gray-400 focus:ring-2 focus:ring-gray-300">
                         </div>
-                        <div class="job-card_content w-100">
-                            <div class="job-card_title-section">
-                                <h4 class="job-card_title"><a href="../{{$job->id}}">{{$job->title}}</a> </h4>
-                            </div>
-                            <div class="row p-2 font-i bg-white" >
-                                <div class="col-md-4 ">
-                                    <i class="fa fa-calendar "></i> {{\Carbon\Carbon::parse($job['Posted_date'])->diffForHumans()}}
-                                </div>
-                                <div class="col-md-3 ">
-                                    @if($job->company_profile!=null)
-                                    <i class="fa fa-user "></i><a href="../../dp/{{$job->company_profile->id}}"> {{ucfirst(strtolower($job->company_profile->name))}}</a>
-                                    @endif
-                                </div>
-                                <div class="col-md-3 ">
-                                    <i class="fa fa-folder "></i> {{$job->category->cat_name}}
-                                </div>
-                                <div class="col-md-2 ">
-                                    <i class="fa fa-eye "></i> {{$job->seenctr}}
-                                </div>
 
-                            </div>
-                            <div class="row p-2" style="font-size: 11pt;">
-                                <div class="col-sm-12">
+                        {{-- 📂 Category --}}
+                        <div>
+                            <label class="block text-sm font-medium mb-1">Category</label>
+                            <select name="category"
+                                class="w-full bg-gray-100 border-0 rounded-full px-4 py-2 text-black focus:ring-2 focus:ring-gray-300">
 
-                                    <p>{{$job->small_description}}
-                                    <p class="font-i"><i class="fa fa-location-arrow "></i> Kabul, Afghansitan</p>
+                                <option value="">All Categories</option>
 
-                                </div>
-                            </div>
+                                @foreach($cats as $item)
+                                @if($item->cat_cat == 'JOB')
+                                <option value="{{ $item->id }}"
+                                    {{ request('category') == $item->id ? 'selected' : '' }}>
+                                    {{ $item->cat_name }}
+                                </option>
+                                @endif
+                                @endforeach
 
-                        </div>
-                    </div>
-                        @endif
-                    @endforeach
-                    @else
-                        <div class="row items-center"><h4>Sorry, no Jobs to display yet! :(</h4></div>
-                    @endif
-                    <div class="row" >
-                        <!-- went to providers and used bootstrap for pagination -->
-                        <div class="col-lg-2 mx-auto m-3">
-                            {!! $jobs->onEachSide(5)->links() !!}
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Job search -->
-                <div class="col-md-3">
-                    <h3>Search</h3>
-                    <div class="row bg-white p-3 mx-auto" style="position: relative;max-width: 20rem;">
-
-
-                        <form>
-                            <label for="hello">
-                                Keyword
-                            </label>
-                            <input type="text" class="form-control" name="Keyword">
-
-                            <label for="hello">
-                                Category
-                            </label>
-                            <select id="category" name="category" class="form-control">
-                                <option value="Ref">Accounting</option>
-                                <option value="Med">Programming</option>
-                                <option value="Food">Engineering</option>
-                                <option value="Agri">Manufacturing</option>
                             </select>
+                        </div>
 
-                            <label for="Author">
-                                Company
-                            </label>
-                            <input type="text" class="form-control" name="Author">
+                        {{-- 📍 Location --}}
+                        <div>
+                            <label class="block text-sm font-medium mb-1">Location</label>
+                            <input type="text"
+                                name="location"
+                                placeholder="Location"
+                                value="{{ request('location') }}"
+                                class="w-full bg-gray-100 border-0 rounded-full px-4 py-2 text-black placeholder:text-gray-400 focus:ring-2 focus:ring-gray-300">
+                        </div>
 
-                            <label for="location">
-                                Date
-                            </label>
-                            <input type="date" class="form-control" name="Location">
-                            <div class="input-group p-3 justify-content-center" >
-                                <button type="submit" class="btn btn-secondary"><i class="fa fa-search"></i> Search</button>
-                            </div>
+                        {{-- 🔘 Buttons --}}
+                        <div class="flex gap-2 mt-4 justify-center items-center">
 
-                        </form>
+                            <button type="submit"
+                                class="w-1/3 bg-gray-700 hover:bg-gray-800 text-white rounded-full px-4 py-2 flex justify-center items-center gap-2">
+                                <i class="fa fa-search"></i> Search
+                            </button>
 
+                            <a href="{{ route('j.search') }}"
+                                class="w-1/3 text-center bg-red-500 hover:bg-red-600 text-white rounded-full px-4 py-2">
+                                Reset
+                            </a>
 
+                        </div>
 
-                    </div>
-
-                    <hr>
-
-                    <h3>Categories</h3>
-<style>
-    ul li {
-        list-style-type: none;
-
-    }
-    a {
-        text-decoration: none;
-        color:black;
-    }
-    a:hover{
-        text-decoration: underline;
-        color: #555;
-    }
-</style>
-
-                    <ul >
+                    </form>
+                </div>
+                {{-- CATEGORIES LIST --}}
+                <div class="bg-white p-4 rounded-lg shadow">
+                    <h3 class="text-lg font-semibold mb-3">Categories</h3>
+                    <ul class="space-y-1 text-gray-700">
                         @foreach($cats as $item)
-                            @if($item->cat_root != 0 )
-                        <li style="list-style-type: disc"><a href="{{$item->id}}"> {{$item->cat_name}} ({{App\Models\Job::where('cat_id', '=', $item->id)->count()}})</a></li>
-                                @else
-                            @endif
+                        @if($item->cat_root != 0)
+                        <li class="ml-4 list-disc">
+                            <a href="{{ $item->id }}" class="hover:underline">{{ $item->cat_name }} ({{ App\Models\Job::where('cat_id', $item->id)->count() }})</a>
+                        </li>
+                        @endif
                         @endforeach
-                        <li style="list-style-type: disc"><a href="../">Show All </a> </li>
+                        <li class="ml-4 list-disc">
+                            <a href="../" class="hover:underline">Show All</a>
+                        </li>
                     </ul>
                 </div>
+
             </div>
 
         </div>
+    </div>
+</section>
 
-    </section>
-
-
-
-@endsection
-
-@section('footer_scripts')
-    <section id="modelsdefbm">
-        <div class="modal-donation fade" id="DonationModel" tabindex="-1" aria-labelledby="DonateModel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="DonateModel">Contribute Now</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <h5>Help Afghan Refugees</h5>
-                        <p class="font-s text-justify">
-                            Suspendisse potenti. Ut non tempus justo. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.
-                        </p>
-                        <h5>Please select an Amount you wish to donate:</h5>
-
-                        <form class="row g-3 justify-center mb-2">
-                            <div class="col-auto">
-                                <button class="btn btn-warning" style="font-weight: 600;">$ 1</button>
-                                <button class="btn btn-warning" style="font-weight: 600;">$ 5</button>
-                                <button class="btn btn-warning" style="font-weight: 600;">$ 10</button>
-                                <button class="btn btn-warning" style="font-weight: 600;">$ 20</button>
-                            </div>
-                            <div class="col-auto">
-                                <input type="text" class="form-control" style="width: 80px; " placeholder="other..">
-                            </div>
-                        </form>
-
-
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-success">Proceed</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-
-    </section>
+{{-- DONATION MODAL --}}
+<div id="DonationModel" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div class="bg-white rounded-lg w-full max-w-lg p-6 relative">
+        <h5 class="text-xl font-bold mb-2">Contribute Now</h5>
+        <h5 class="text-lg font-semibold mb-2">Help Afghan Refugees</h5>
+        <p class="text-gray-700 mb-4">Suspendisse potenti. Ut non tempus justo. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.</p>
+        <h5 class="mb-2">Please select an Amount you wish to donate:</h5>
+        <form class="flex flex-wrap gap-2 mb-4">
+            <button class="bg-yellow-400 hover:bg-yellow-500 font-semibold px-4 py-2 rounded">$1</button>
+            <button class="bg-yellow-400 hover:bg-yellow-500 font-semibold px-4 py-2 rounded">$5</button>
+            <button class="bg-yellow-400 hover:bg-yellow-500 font-semibold px-4 py-2 rounded">$10</button>
+            <button class="bg-yellow-400 hover:bg-yellow-500 font-semibold px-4 py-2 rounded">$20</button>
+            <input type="text" class="border rounded px-2 py-1 w-20" placeholder="Other..">
+        </form>
+        <div class="flex justify-end gap-2">
+            <button onclick="document.getElementById('DonationModel').classList.add('hidden')" class="px-4 py-2 rounded bg-gray-300 hover:bg-gray-400">Close</button>
+            <button class="px-4 py-2 rounded bg-green-600 hover:bg-green-700 text-white font-semibold">Proceed</button>
+        </div>
+    </div>
+</div>
 
 @endsection
-
