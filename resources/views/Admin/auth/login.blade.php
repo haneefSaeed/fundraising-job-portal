@@ -1,66 +1,85 @@
-
 <x-guest-layout>
-    <x-auth-card>
-        <x-slot name="content">
-            <div class="row">
-                <div class="col-lg-12">
-                    <h1 style="font-size: 22pt; font-family: 'Barlow',serif">Admin Login now!</h1>
-                </div>
 
-                <div class="col-lg-12">
-                    <h5 style="font-size: 14pt; font-family: 'Barlow',serif">People need your help...</h5>
-                </div>
-                <div class="col-lg-12 mt-3">
-                    <p style="font-size: 10pt; font-family: 'Barlow',serif">If you haven't registerd yet, click <a style="font-weight: 600" href="{{url('/register')}}">Here </a> to Register</h5>
-                </div>
-            </div>
-        </x-slot>
+<div class="min-h-screen flex items-center justify-center bg-gray-100 px-4">
 
-        <!-- Session Status -->
-        <x-auth-session-status class="mb-4" :status="session('status')" />
+    <div class="w-full max-w-md bg-white shadow-lg rounded-2xl p-8">
 
-        <!-- Validation Errors -->
-        <x-auth-validation-errors class="mb-4" :errors="$errors" />
+        <!-- Header -->
+        <div class="mb-6 text-center">
+            <h1 class="text-2xl font-semibold text-gray-800">
+                Admin Login
+            </h1>
+            <p class="text-sm text-gray-500 mt-1">
+                People need your help...
+            </p>
+            <p class="text-xs text-gray-400 mt-2">
+                Don’t have an account?
+                <a href="{{url('/register')}}" class="font-semibold text-indigo-600 hover:underline">
+                    Register here
+                </a>
+            </p>
+        </div>
 
-        <form method="POST" action="{{ route('admin.adminlogin') }}">
+        <!-- Status -->
+        <x-auth-session-status class="mb-4 text-green-600" :status="session('status')" />
+
+        <!-- Errors -->
+        <x-auth-validation-errors class="mb-4 text-red-500" :errors="$errors" />
+
+        <!-- Form -->
+        <form method="POST" action="{{ route('admin.adminlogin') }}" class="space-y-4">
             @csrf
 
-            <!-- Email Address -->
+            <!-- Email -->
             <div>
-                <x-label for="email" :value="__('Email')" />
-
-                <x-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus />
+                <x-label for="email" :value="__('Email')" class="text-sm text-gray-700" />
+                <x-input id="email"
+                         class="block mt-1 w-full rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500"
+                         type="email"
+                         name="email"
+                         :value="old('email')"
+                         required autofocus />
             </div>
 
             <!-- Password -->
-            <div class="mt-4">
-                <x-label for="password" :value="__('Password')" />
-
-                <x-input id="password" class="block mt-1 w-full"
-                                type="password"
-                                name="password"
-                                required autocomplete="current-password" />
+            <div>
+                <x-label for="password" :value="__('Password')" class="text-sm text-gray-700" />
+                <x-input id="password"
+                         class="block mt-1 w-full rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500"
+                         type="password"
+                         name="password"
+                         required />
             </div>
 
-            <!-- Remember Me -->
-            <div class="block mt-4">
-                <label for="remember_me" class="inline-flex items-center">
-                    <input id="remember_me" type="checkbox" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" name="remember">
-                    <span class="ml-2 text-sm text-gray-600">{{ __('Remember me') }}</span>
+            <!-- Remember + Forgot -->
+            <div class="flex items-center justify-between text-sm">
+                <label class="flex items-center gap-2">
+                    <input type="checkbox"
+                           name="remember"
+                           class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+                    <span class="text-gray-600">Remember me</span>
                 </label>
-            </div>
 
-            <div class="flex items-center justify-end mt-4">
                 @if (Route::has('password.request'))
-                    <a class="underline text-sm text-gray-600 hover:text-gray-900" href="{{ route('password.request') }}">
-                        {{ __('Forgot your password?') }}
+                    <a href="{{ route('password.request') }}"
+                       class="text-indigo-600 hover:underline">
+                        Forgot?
                     </a>
                 @endif
-
-                <x-button class="ml-3">
-                    {{ __('Log in') }}
-                </x-button>
             </div>
+
+            <!-- Submit -->
+            <div>
+                <button type="submit"
+                        class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2.5 rounded-lg transition">
+                    Log in
+                </button>
+            </div>
+
         </form>
-    </x-auth-card>
+
+    </div>
+
+</div>
+
 </x-guest-layout>
