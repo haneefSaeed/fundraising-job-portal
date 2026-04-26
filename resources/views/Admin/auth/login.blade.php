@@ -1,80 +1,35 @@
 <x-guest-layout>
 
-<div class="min-h-screen flex items-center justify-center bg-gray-100 px-4">
+<div class="min-h-screen flex items-center justify-center bg-black px-4">
 
-    <div class="w-full max-w-md bg-white shadow-lg rounded-2xl p-8">
-
-        <!-- Header -->
-        <div class="mb-6 text-center">
-            <h1 class="text-2xl font-semibold text-gray-800">
-                Admin Login
-            </h1>
-            <p class="text-sm text-gray-500 mt-1">
-                People need your help...
-            </p>
-            <p class="text-xs text-gray-400 mt-2">
-                Don’t have an account?
-                <a href="{{url('/register')}}" class="font-semibold text-indigo-600 hover:underline">
-                    Register here
-                </a>
-            </p>
-        </div>
-
-        <!-- Status -->
-        <x-auth-session-status class="mb-4 text-green-600" :status="session('status')" />
+    <div class="w-full max-w-xs bg-neutral-900 border border-neutral-800 rounded-xl p-5 shadow-lg">
 
         <!-- Errors -->
-        <x-auth-validation-errors class="mb-4 text-red-500" :errors="$errors" />
+        <x-auth-validation-errors class="mb-3 text-red-400 text-sm" :errors="$errors" />
 
-        <!-- Form -->
-        <form method="POST" action="{{ route('admin.adminlogin') }}" class="space-y-4">
+        <form method="POST" action="{{ route('admin.adminlogin') }}" class="space-y-3">
             @csrf
 
             <!-- Email -->
-            <div>
-                <x-label for="email" :value="__('Email')" class="text-sm text-gray-700" />
-                <x-input id="email"
-                         class="block mt-1 w-full rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500"
-                         type="email"
-                         name="email"
-                         :value="old('email')"
-                         required autofocus />
-            </div>
+            <input type="email"
+                   name="email"
+                   value="{{ old('email') }}"
+                   placeholder="Email"
+                   required autofocus
+                   class="w-full px-3 py-2 bg-neutral-800 border border-neutral-700 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-white" />
 
             <!-- Password -->
-            <div>
-                <x-label for="password" :value="__('Password')" class="text-sm text-gray-700" />
-                <x-input id="password"
-                         class="block mt-1 w-full rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500"
-                         type="password"
-                         name="password"
-                         required />
-            </div>
-
-            <!-- Remember + Forgot -->
-            <div class="flex items-center justify-between text-sm">
-                <label class="flex items-center gap-2">
-                    <input type="checkbox"
-                           name="remember"
-                           class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
-                    <span class="text-gray-600">Remember me</span>
-                </label>
-
-                @if (Route::has('password.request'))
-                    <a href="{{ route('password.request') }}"
-                       class="text-indigo-600 hover:underline">
-                        Forgot?
-                    </a>
-                @endif
-            </div>
+            <input type="password"
+                   name="password"
+                   placeholder="Password"
+                   required
+                   class="w-full px-3 py-2 bg-neutral-800 border border-neutral-700 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-white" />
 
             <!-- Submit -->
-            <div>
-                <button type="submit"
-                        class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2.5 rounded-lg transition">
-                    Log in
-                </button>
-            </div>
+            <button type="submit"
+                    class="w-full bg-white text-black py-2 rounded-md text-sm font-medium hover:bg-gray-200 transition">
+                Login
+            </button>
 
         </form>
 

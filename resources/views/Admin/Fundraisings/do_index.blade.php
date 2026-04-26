@@ -1,74 +1,85 @@
 @extends('layouts.admin')
 
-
 @section("content")
 
+<div class="p-4 md:p-6 bg-gray-100 min-h-screen text-gray-900">
 
-    <!-- Layout wrapper -->
-    <div class="layout-wrapper layout-content-navbar">
-        <div class="layout-container">
-            <!-- Menu -->
+    <!-- Title -->
+    <h4 class="text-lg mb-4">
+        <span class="text-gray-500">Fundraising /</span>
+        <span class="text-gray-900 font-semibold">Donations</span>
+    </h4>
 
+    <!-- Card -->
+    <div class="bg-white border border-gray-200 rounded-2xl shadow-sm overflow-hidden">
 
-            <!-- Content wrapper -->
-            <div class="content-wrapper">
-                <!-- Content -->
+        <!-- Header -->
+        <div class="px-5 py-4 border-b border-gray-200 text-sm text-gray-700 font-medium">
+            All Donations
+        </div>
 
-                <div class="container-xxl flex-grow-1 container-p-y">
-                    <h4 class="col-md-6 fw-bold py-3 mb-4"><span class="text-muted fw-light">Fundraising /</span> Donations</h4>
+        <!-- Table -->
+        <div class="overflow-x-auto">
 
-                    <!-- Basic Bootstrap Table -->
-                    <div class="card">
-                        <h5 class="card-header">All Donations</h5>
-                        <div class="table-responsive text-nowrap">
-                            <table id="donTable" class="table">
-                                <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Donor</th>
-                                    <th>Cause</th>
-                                    <th>Amount</th>
-                                    <th>Date</th>
-                                    <th>Message</th>
-                                    <th>Replay</th>
-                                </tr>
-                                </thead>
-                                <tbody class="table-border-bottom-0">
-                                @foreach($donations as $donation)
-                                    <tr>
-                                        <td>{{$donation->id}}</td>
-                                        <td><i class="fab fa-angular fa-lg text-danger me-3"></i> <strong>{{$donation->user->name}}</strong></td>
-                                        <td>{{$donation->cause->cause_title}}</td>
-                                        <td>{{number_format($donation->amount)}}</td>
-                                        <td>{{date('Y-M-d h:i:s' , strtotime($donation->date))}}</td>
-                                        <td>{{$donation->msg}}</td>
-                                        <td>{{$donation->rep_msg}}</td>
-                                    </tr>
-                                @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                    <!--/ Basic Bootstrap Table -->
+            <table id="donTable" class="min-w-full text-sm text-left">
 
-                </div>
-            </div>
+                <!-- Head -->
+                <thead class="bg-gray-100 text-gray-600 uppercase text-xs tracking-wider">
+                <tr>
+                    <th class="px-4 py-3">ID</th>
+                    <th class="px-4 py-3">Donor</th>
+                    <th class="px-4 py-3">Cause</th>
+                    <th class="px-4 py-3">Amount</th>
+                    <th class="px-4 py-3">Date</th>
+                    <th class="px-4 py-3">Message</th>
+                    <th class="px-4 py-3">Reply</th>
+                </tr>
+                </thead>
+
+                <!-- Body -->
+                <tbody class="divide-y divide-gray-200">
+
+                @foreach($donations as $donation)
+                    <tr class="hover:bg-gray-50 transition">
+
+                        <td class="px-4 py-3 text-gray-700">
+                            {{ $donation->id }}
+                        </td>
+
+                        <td class="px-4 py-3 font-medium text-gray-900">
+                            {{ $donation->user->name }}
+                        </td>
+
+                        <td class="px-4 py-3 text-gray-700">
+                            {{ $donation->cause->cause_title }}
+                        </td>
+
+                        <td class="px-4 py-3 font-semibold text-gray-900">
+                            {{ number_format($donation->amount) }}
+                        </td>
+
+                        <td class="px-4 py-3 text-gray-500">
+                            {{ date('Y-M-d h:i:s', strtotime($donation->date)) }}
+                        </td>
+
+                        <td class="px-4 py-3 text-gray-600">
+                            {{ $donation->msg }}
+                        </td>
+
+                        <td class="px-4 py-3 text-gray-600">
+                            {{ $donation->rep_msg }}
+                        </td>
+
+                    </tr>
+                @endforeach
+
+                </tbody>
+
+            </table>
+
         </div>
     </div>
-                <!-- / Content -->
 
-@endsection
+</div>
 
-@section('footer')
-    <script>
-        document.getElementById('db_pitem_funds').classList.add('active');
-        document.getElementById('db_item_donfund').classList.add('active');
-    </script>
-    <script>
-        $(document).ready(function () {
-            $('#donTable').DataTable({
-                order: [[0, 'desc']],
-            });
-        });
-    </script>
 @endsection

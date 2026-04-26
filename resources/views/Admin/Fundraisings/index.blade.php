@@ -1,91 +1,118 @@
 @extends('layouts.admin')
 
-
 @section("content")
 
+<div class="p-4 md:p-6 bg-gray-100 min-h-screen text-gray-900">
 
-    <!-- Layout wrapper -->
-    <div class="layout-wrapper layout-content-navbar">
-        <div class="layout-container">
-            <!-- Menu -->
+    <!-- Title -->
+    <h4 class="text-lg mb-4">
+        <span class="text-gray-500">Fundraisings /</span>
+        <span class="text-gray-900 font-semibold">All Fundraisings</span>
+    </h4>
 
+    <!-- Card -->
+    <div class="bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm">
 
-            <!-- Content wrapper -->
-            <div class="content-wrapper">
-                <!-- Content -->
-
-                <div class="container-xxl flex-grow-1 container-p-y">
-                    <h4 class="col-md-6 fw-bold py-3 mb-4"><span class="text-muted fw-light">Fundraisings /</span> All Fundraisings </h4>
-
-                    <!-- Basic Bootstrap Table -->
-                    <div class="card">
-                        <h5 class="card-header">All Fundraising</h5>
-                        <div class="table-responsive text-nowrap">
-                            <table id="allFundTable" class="table">
-                                <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Title</th>
-                                    <th>Description</th>
-                                    <th>Fundraiser</th>
-                                    <th>Category</th>
-                                    <th>Image</th>
-                                    <th>Location</th>
-                                    <th>Date</th>
-                                    <th>Goal</th>
-                                    <th>Status</th>
-                                    <th>Tags</th>
-                                </tr>
-                                </thead>
-                                <tbody class="table-border-bottom-0">
-                                @foreach($causes as $cause)
-                                    <tr>
-                                        <td>{{$cause->id}}</td>
-                                        <td><i class="fab fa-angular fa-lg text-danger me-3"></i> <strong>{{$cause->cause_title}}</strong></td>
-                                        <td>{{substr($cause->cause_description, 0, 30)}}</td>
-                                        <td>{{$cause->fr_profile->user->name}}</td>
-                                        <td>{{$cause->category->cat_name}}</td>
-                                        <td><img width="50px" height="30px" src="{{asset($cause->cause_img)}}"> </td>
-                                        <td>{{$cause->cause_location}}</td>
-                                        <td>{{date('Y-M-d', strtotime($cause->cause_start_date))}}</td>
-                                        <td>{{number_format($cause->cause_goal)}}</td>
-                                        <td>
-                                            @if($cause->cause_status == 0)
-                                                <span class="badge bg-label-primary me-1">Pending</span>
-                                            @elseif($cause->cause_status == 1)
-                                                <span class="badge bg-label-success me-1">Varified</span>
-                                            @else
-                                                <span class="badge bg-label-danger me-1">Rejected</span>
-                                            @endif
-                                        </td>
-                                        <td>{{$cause->cause_tags}}</td>
-                                    </tr>
-                                @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                    <!--/ Basic Bootstrap Table -->
-
-                </div>
-                <!-- / Content -->
-            </div>
+        <!-- Header -->
+        <div class="px-5 py-4 border-b border-gray-200 text-sm text-gray-600">
+            All Fundraising
         </div>
+
+        <!-- Table -->
+        <div class="overflow-x-auto">
+
+            <table id="allFundTable" class="min-w-full text-sm text-left">
+
+                <!-- Head -->
+                <thead class="bg-gray-100 text-gray-600 uppercase text-xs tracking-wider">
+                <tr>
+                    <th class="px-4 py-3">ID</th>
+                    <th class="px-4 py-3">Title</th>
+                    <th class="px-4 py-3">Description</th>
+                    <th class="px-4 py-3">Fundraiser</th>
+                    <th class="px-4 py-3">Category</th>
+                    <th class="px-4 py-3">Image</th>
+                    <th class="px-4 py-3">Location</th>
+                    <th class="px-4 py-3">Date</th>
+                    <th class="px-4 py-3">Goal</th>
+                    <th class="px-4 py-3">Status</th>
+                    <th class="px-4 py-3">Tags</th>
+                </tr>
+                </thead>
+
+                <!-- Body -->
+                <tbody class="divide-y divide-gray-200">
+
+                @foreach($causes as $cause)
+                    <tr class="hover:bg-gray-50 transition">
+
+                        <td class="px-4 py-3 text-gray-700">{{ $cause->id }}</td>
+
+                        <td class="px-4 py-3 font-medium text-gray-900">
+                            {{ $cause->cause_title }}
+                        </td>
+
+                        <td class="px-4 py-3 text-gray-500">
+                            {{ substr($cause->cause_description, 0, 35) }}
+                        </td>
+
+                        <td class="px-4 py-3 text-gray-700">
+                            {{ $cause->fr_profile->user->name }}
+                        </td>
+
+                        <td class="px-4 py-3 text-gray-700">
+                            {{ $cause->category->cat_name }}
+                        </td>
+
+                        <td class="px-4 py-3">
+                            <img class="w-12 h-8 object-cover rounded-md border border-gray-200"
+                                 src="{{ asset($cause->cause_img) }}">
+                        </td>
+
+                        <td class="px-4 py-3 text-gray-500">
+                            {{ $cause->cause_location }}
+                        </td>
+
+                        <td class="px-4 py-3 text-gray-500">
+                            {{ date('Y-M-d', strtotime($cause->cause_start_date)) }}
+                        </td>
+
+                        <td class="px-4 py-3 text-gray-800 font-medium">
+                            {{ number_format($cause->cause_goal) }}
+                        </td>
+
+                        <!-- Status -->
+                        <td class="px-4 py-3">
+                            @if($cause->cause_status == 0)
+                                <span class="px-2 py-1 text-xs rounded-md bg-blue-100 text-blue-600 border border-blue-200">
+                                    Pending
+                                </span>
+                            @elseif($cause->cause_status == 1)
+                                <span class="px-2 py-1 text-xs rounded-md bg-green-100 text-green-600 border border-green-200">
+                                    Verified
+                                </span>
+                            @else
+                                <span class="px-2 py-1 text-xs rounded-md bg-red-100 text-red-600 border border-red-200">
+                                    Rejected
+                                </span>
+                            @endif
+                        </td>
+
+                        <td class="px-4 py-3 text-gray-500">
+                            {{ $cause->cause_tags }}
+                        </td>
+
+                    </tr>
+                @endforeach
+
+                </tbody>
+
+            </table>
+
+        </div>
+
     </div>
 
-@endsection
+</div>
 
-@section('footer')
-    <script>
-        document.getElementById('db_pitem_funds').classList.add('active');
-        document.getElementById('db_item_allfund').classList.add('active');
-    </script>
-
-    <script>
-        $(document).ready(function () {
-            $('#allFundTable').DataTable({
-                order: [[0, 'desc']],
-            });
-        });
-    </script>
 @endsection
